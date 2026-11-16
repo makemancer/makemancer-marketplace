@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer: Generate Sound Effects"
+  short_description: "Create Foley, ambience, loops, and sound effects"
+  default_prompt: "Use $makemancer-generate-sound-effects to create a polished sound effect for this request."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

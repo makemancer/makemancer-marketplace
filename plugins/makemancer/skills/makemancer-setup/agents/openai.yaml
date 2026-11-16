@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer Setup"
+  short_description: "Guided first run: your first on-brand video"
+  default_prompt: "Use $makemancer-setup to show me what Makemancer can do and walk me through my first video."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer image, video, voice, Character and theme tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

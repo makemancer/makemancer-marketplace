@@ -1,0 +1,37 @@
+{
+  "name": "makemancer-marketplace",
+  "description": "Makemancer plugin for Codex: images, video, voiceovers, music and sound effects.",
+  "version": "1.0.0",
+  "owner": {
+    "name": "Makemancer"
+  },
+  "plugins": [
+    {
+      "name": "makemancer",
+      "source": "./plugins/makemancer",
+      "description": "Generate and edit images, video clips, voiceovers, music and sound effects from chat, with product photoshoots and smart model routing.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Makemancer"
+      },
+      "repository": "https://github.com/makemancer/makemancer-marketplace",
+      "homepage": "https://makemancer.com",
+      "license": "Apache-2.0",
+      "keywords": [
+        "image-generation",
+        "image-editing",
+        "video-generation",
+        "text-to-video",
+        "image-to-video",
+        "product-photography",
+        "voiceover",
+        "text-to-speech",
+        "music-generation",
+        "sound-effects",
+        "ai-media",
+        "mcp"
+      ],
+      "category": "creative"
+    }
+  ]
+}

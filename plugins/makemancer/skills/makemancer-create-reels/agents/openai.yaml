@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Long Video to Reels"
+  short_description: "Turn long videos into configurable social clips"
+  default_prompt: "Use $makemancer-create-reels to find strong standalone moments in my video and make social clips in my requested format, with captions when appropriate."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer transcription, media editing, and assets"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Voice Cloning"
+  short_description: "Record, clone and reuse your own voice"
+  default_prompt: "Use $makemancer-clone-voice to create and audition my consented voice clone."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

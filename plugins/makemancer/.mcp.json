@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "makemancer": {
+      "type": "http",
+      "url": "https://makemancer.com/api/mcp"
+    }
+  }
+}

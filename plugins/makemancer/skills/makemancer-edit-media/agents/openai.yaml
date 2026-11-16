@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Edit Existing Media"
+  short_description: "Trim, cut, reframe, caption, and add intros to media"
+  default_prompt: "Use $makemancer-edit-media to edit my existing footage or recording (cuts, framing, captions, audio, or an intro/outro) and deliver the finished result."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

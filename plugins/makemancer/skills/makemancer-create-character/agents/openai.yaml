@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Create Character"
+  short_description: "Create a reusable visual character and voice"
+  default_prompt: "Use $makemancer-create-character to create and save a consistent character from my brief and references."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

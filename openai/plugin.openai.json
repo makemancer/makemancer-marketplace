@@ -1,0 +1,40 @@
+{
+  "$comment": "OpenAI directory overlay. pack-openai.mjs merges it with brand.json (display name, short description, prompts, URLs). `name` is a placeholder: before uploading, replace it with the plugin ID OpenAI assigns (app-...), or the portal rejects the package. Review test cases and the demo video are added in S5.",
+  "name": "makemancer",
+  "version": "0.1.0",
+  "keywords": [
+    "ai image generator",
+    "image editing",
+    "product photography",
+    "ai video generator",
+    "text to video",
+    "image to video",
+    "animate photo",
+    "talking photo",
+    "voiceover",
+    "text to speech",
+    "music generation",
+    "sound effects",
+    "upscale",
+    "background removal"
+  ],
+  "interface": {
+    "longDescription": "Create images, product photos, video clips, voiceovers, music and sound effects in the conversation. Animate a product photo into a short clip, turn a portrait and a script into a talking video, or compose a jingle for an ad.\n\nGenerate and edit images with reference photos that keep a product or face consistent, then build a matching set for a campaign. Generate video from text or images with several video models, and choose native audio or finished speech for speaking shots. Narrate a script with stock voices in many languages, compose songs and instrumentals, and make sound effects. Upscale images and video and remove backgrounds.\n\nGenerations use credits from your account; results are saved to your media library. Results vary by model. You can send feedback from the conversation.",
+    "category": "Creativity",
+    "capabilities": [
+      "Generate and edit images",
+      "Product photoshoots",
+      "Generate videos from text or images",
+      "Animate photos",
+      "Talking photos and lip sync",
+      "Voiceovers and text to speech",
+      "Music generation",
+      "Sound effects",
+      "Upscale images and video",
+      "Remove backgrounds"
+    ]
+  },
+  "publication": {
+    "release_notes": "First release: images, product photoshoots, video clips, voiceovers, music and sound effects."
+  }
+}

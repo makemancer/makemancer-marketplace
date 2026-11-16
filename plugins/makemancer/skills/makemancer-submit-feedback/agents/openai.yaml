@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Submit Feedback"
+  short_description: "Report product and quality feedback to the team"
+  default_prompt: "Use $makemancer-submit-feedback to send my feedback about this issue or request to the Makemancer team."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

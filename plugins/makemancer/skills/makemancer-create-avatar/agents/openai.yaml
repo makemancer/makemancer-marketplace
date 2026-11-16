@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer Create Your Avatar"
+  short_description: "Create and save a consistent personal avatar"
+  default_prompt: "Use $makemancer-create-avatar to turn my photos into an approved character sheet and save my reusable avatar."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer image, Character and voice tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

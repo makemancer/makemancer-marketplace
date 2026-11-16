@@ -1,0 +1,49 @@
+---
+name: makemancer-product-photoshoot
+description: "Create a coherent set of campaign-ready product images with Makemancer. Use for packshots, ecommerce sets, lifestyle scenes, launch campaigns, or several images that must preserve the same product and brand."
+---
+
+# Product Photoshoot
+
+For each Makemancer tool call that exposes it, pass the optional `skills_used` array with `makemancer-product-photoshoot`, any other Makemancer skills actually followed, and guide entries in the form `<skill-name>/<relative-guide-path>` (for example, `makemancer-product-photoshoot/references/workflow-basics.md`). Include only skills and guides followed for that call. Omit attribution if the user declines tracking or the field is unavailable. Never send other plugin names, private data, or local paths.
+
+**Not connected yet?** If no Makemancer tools (such as `list_models` or `generate_image`) are available, the plugin is installed but the server is not connected. Stop and tell the user to open the plugin's **Connectors** tab in Claude (Customize, then Plugins, then Makemancer), press **Connect**, and sign in. In Claude Code they run `/mcp` instead. Then they ask again. Do not substitute other tools or describe a result that was not generated.
+
+Read [shared execution guidance](references/workflow-basics.md) once per task before using tools. It covers existing authorization, model discovery, optional cost checks, imports, and recovery.
+
+Produce a consistent image set, not a collection of unrelated prompts. The product's geometry, label, color, materials, and brand treatment are the locked anchors.
+
+## Prepare
+
+1. Confirm the channel, audience, aspect ratios, number of deliverables, background requirements, required copy, and product details that must be exact.
+2. Use `search_assets` to find existing product references, logos, and campaign assets. Import missing references with the platform upload flow.
+3. Call `get_theme` for branded work and identify the usable palette, typography, tone, and logo rules.
+4. Write a compact shot list, such as hero, clean packshot, detail macro, in-use lifestyle, scale/context, and campaign variation. Include only shots the user needs.
+
+Conduct the workflow in the user's language and preserve all approved product and campaign copy exactly.
+
+## Generate
+
+1. Default to `image/nano-banana-2` because it is the cost-efficient recommendation for most product work.
+2. Keep targeted product corrections on `image/nano-banana-2` (Nano Banana 2) first. Escalate to `image/gpt-image-2.5-sunburst` only when complex composition or exact typography materially benefits. Use `image/seedream-5-pro` when the user explicitly requests Seedream. After a model moderation refusal, Seedream may also be offered as the tool's suggested alternative, with user confirmation before another paid generation; it applies its own safety checks and may still reject the request.
+3. Discover with `list_models({ category: "image" })` only when selecting a model; fetch missing settings with `get_model_params` and reuse them across the set. Estimate planned images only when the user asks about cost or sets a budget.
+4. Establish a hero direction, reusing an approved reference when supplied. Follow requested review stages; once the user approves the complete set, generate the remaining shots. Repeat locked product facts and use the selected hero as a reference where supported.
+5. Preserve exact quoted copy, reference labels, dialogue, timecodes, colors, and approved layout or edit constraints in the prompt.
+
+## Quality control
+
+Compare every image against the source product for silhouette, proportions, cap or closure, logo, label text, materials, colors, and reflections. Also check shadows, contact with surfaces, crop safety, and consistency across the set. Reject attractive images that misrepresent the product.
+
+Tag approved assets consistently with product, campaign, shot type, aspect ratio, and status so video and UGC workflows can reuse them.
+
+For video, save a neutral packshot and a label/logo close-up as named anchors. Generate video keyframes at the video's ratio, not the campaign ratio.
+
+## Save results to the user's folder
+
+When you can read and write local files (Claude Code, Codex, Cowork and similar), save every finished result as soon as its job completes:
+
+1. Download each output from its permanent URL with `curl --fail -L -o <path> <url>` into the current folder, at `makemancer/<YYYY-MM-DD>/<name>-<NN>.<ext>`, for example `makemancer/2026-11-08/product-ad-01.mp4`.
+2. Name the file after what it shows, in a few words in the user's language. Number multiple results of one request in order from `01`. Never overwrite a file: use the next free number.
+3. Tell the user the saved path or paths.
+
+Where you cannot write files (Claude.ai, ChatGPT), skip this: the result card has a Download button.

@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Render HTML"
+  short_description: "Render exact HTML layouts to PNG or video"
+  default_prompt: "Use $makemancer-render-html to render my explicit HTML, CSS, or HyperFrames composition as an image or video."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — AI Media Studio"
+  short_description: "Route complete image, video, voice, and film work"
+  default_prompt: "Use $makemancer to choose and run the right Makemancer workflow for my request."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

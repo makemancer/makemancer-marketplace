@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Ad Variations"
+  short_description: "Make a numbered set of video ad variations"
+  default_prompt: "Use $makemancer-ad-variations to turn my product shot into five 9:16 ad variations with different hooks."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

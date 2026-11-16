@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Generate Video"
+  short_description: "Generate or edit one video clip with smart routing"
+  default_prompt: "Use $makemancer-generate-video to turn this brief and my references into a polished video clip."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

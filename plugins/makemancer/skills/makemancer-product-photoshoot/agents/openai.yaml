@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Product Photoshoot"
+  short_description: "Create a consistent campaign-ready product shoot"
+  default_prompt: "Use $makemancer-product-photoshoot to create a polished set of product images from my references."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

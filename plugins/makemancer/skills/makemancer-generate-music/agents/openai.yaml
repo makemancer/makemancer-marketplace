@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer: Generate Music"
+  short_description: "Compose music, songs, beds, and stings"
+  default_prompt: "Use $makemancer-generate-music to compose a polished music track for this request."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

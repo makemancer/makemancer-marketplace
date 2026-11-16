@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Swap Characters"
+  short_description: "Swap people in an existing video with your Characters"
+  default_prompt: "Use $makemancer-swap-characters to put my Character into this video in place of the person on screen."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

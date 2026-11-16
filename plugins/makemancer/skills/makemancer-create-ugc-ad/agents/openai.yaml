@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Create UGC Ad"
+  short_description: "Create a scripted UGC product video"
+  default_prompt: "Use $makemancer-create-ugc-ad to make a convincing UGC product ad from my product and creator references."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

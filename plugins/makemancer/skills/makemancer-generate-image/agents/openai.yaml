@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Generate Image"
+  short_description: "Generate or edit images with smart model routing"
+  default_prompt: "Use $makemancer-generate-image to create or edit this image with the right model."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

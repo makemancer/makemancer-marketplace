@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Generate Voiceover"
+  short_description: "Create speech, narration, and new voices"
+  default_prompt: "Use $makemancer-generate-voiceover to choose or design a voice and perform this script."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,13 @@
+interface:
+  display_name: "Makemancer — Budget Projects"
+  short_description: "Track spend per client or job and show each project's cost"
+  default_prompt: "Use $makemancer-budget-projects to track the cost of this work in a budget project."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "makemancer"
+      description: "Makemancer media, asset, Character, Film, and feedback tools"
+      transport: "streamable_http"
+      url: "https://makemancer.com/api/mcp/chatgpt"
+policy:
+  allow_implicit_invocation: true
