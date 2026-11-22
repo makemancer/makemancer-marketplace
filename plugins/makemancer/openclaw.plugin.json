@@ -1,0 +1,41 @@
+{
+  "id": "makemancer",
+  "name": "Makemancer",
+  "description": "Generate and edit images, video clips, voiceovers, music and sound effects from chat, with product photoshoots and smart model routing.",
+  "version": "0.1.0",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
+  "mcpServers": {
+    "makemancer": {
+      "transport": "streamable-http",
+      "url": "https://makemancer.com/api/mcp",
+      "auth": "oauth"
+    }
+  },
+  "skills": [
+    "skills/makemancer",
+    "skills/makemancer-setup",
+    "skills/makemancer-generate-image",
+    "skills/makemancer-generate-video",
+    "skills/makemancer-generate-voiceover",
+    "skills/makemancer-generate-music",
+    "skills/makemancer-generate-sound-effects",
+    "skills/makemancer-product-photoshoot",
+    "skills/makemancer-submit-feedback",
+    "skills/makemancer-swap-characters",
+    "skills/makemancer-plan-video",
+    "skills/makemancer-build-film",
+    "skills/makemancer-create-ugc-ad",
+    "skills/makemancer-ad-variations",
+    "skills/makemancer-create-avatar",
+    "skills/makemancer-create-character",
+    "skills/makemancer-edit-media",
+    "skills/makemancer-create-reels",
+    "skills/makemancer-render-html",
+    "skills/makemancer-budget-projects",
+    "skills/makemancer-clone-voice"
+  ]
+}

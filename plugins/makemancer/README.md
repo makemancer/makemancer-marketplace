@@ -13,6 +13,15 @@ In Claude Code:
 
 In Claude, add it from Customize, then Plugins, and press **Connect** on its Connectors tab.
 
+In OpenClaw, install this folder as a plugin for the skills, then add the server and sign in (a plugin's own MCP entry cannot sign in with OAuth):
+
+```
+openclaw mcp add makemancer --url https://makemancer.com/api/mcp --transport streamable-http --auth oauth
+openclaw mcp login makemancer
+```
+
+Cursor, Grok Bot, Hermes Agent, VS Code and other MCP apps: see https://makemancer.com/connect.
+
 ## How it works
 
 This plugin bundles skills (workflow instructions for the agent) and connects to the Makemancer remote MCP server at `https://makemancer.com/api/mcp`. You sign in with OAuth when you first connect. The plugin contains no local code; every generation runs on the Makemancer service.

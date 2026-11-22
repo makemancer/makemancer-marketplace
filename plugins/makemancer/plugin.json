@@ -1,0 +1,28 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "makemancer",
+  "version": "0.1.0",
+  "description": "Generate and edit images, video clips, voiceovers, music and sound effects from chat, with product photoshoots and smart model routing.",
+  "author": {
+    "name": "Makemancer",
+    "email": "support@makemancer.com",
+    "url": "https://makemancer.com"
+  },
+  "homepage": "https://makemancer.com",
+  "repository": "https://github.com/makemancer/makemancer-marketplace",
+  "license": "Apache-2.0",
+  "keywords": [
+    "image-generation",
+    "image-editing",
+    "video-generation",
+    "text-to-video",
+    "image-to-video",
+    "product-photography",
+    "voiceover",
+    "text-to-speech",
+    "music-generation",
+    "sound-effects",
+    "ai-media",
+    "mcp"
+  ]
+}

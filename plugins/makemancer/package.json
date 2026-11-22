@@ -1,0 +1,32 @@
+{
+  "name": "@makemancer/plugin",
+  "version": "0.1.0",
+  "description": "Makemancer plugin for OpenClaw, Hermes, Grok, Cursor, Claude, Codex and compatible agents",
+  "type": "module",
+  "license": "Apache-2.0",
+  "homepage": "https://makemancer.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/makemancer/makemancer-marketplace.git",
+    "directory": "plugins/makemancer"
+  },
+  "keywords": [
+    "openclaw",
+    "hermes-agent",
+    "grok",
+    "cursor",
+    "mcp",
+    "ai-media"
+  ],
+  "files": [
+    "openclaw.plugin.json",
+    "plugin.json",
+    "mcp.json",
+    ".mcp.json",
+    "skills/",
+    "assets/",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ]
+}

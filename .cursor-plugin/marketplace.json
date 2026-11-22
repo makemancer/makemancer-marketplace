@@ -1,0 +1,17 @@
+{
+  "name": "makemancer-marketplace",
+  "owner": {
+    "name": "Makemancer",
+    "email": "support@makemancer.com"
+  },
+  "metadata": {
+    "description": "Makemancer plugins for Cursor and Grok Bot"
+  },
+  "plugins": [
+    {
+      "name": "makemancer",
+      "source": "plugins/makemancer",
+      "description": "Generate and edit images, video clips, voiceovers, music and sound effects from chat, with product photoshoots and smart model routing."
+    }
+  ]
+}
