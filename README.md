@@ -22,14 +22,16 @@ Start a new task and complete the browser sign-in when Makemancer asks.
 
 ## OpenClaw
 
-Add the server and sign in:
+Install the skills from ClawHub ([@makemancer/plugin](https://clawhub.ai/makemancer/plugins/plugin)), then add the server and sign in:
 
 ```bash
+openclaw plugins install clawhub:@makemancer/plugin --accept-capabilities
+openclaw plugins enable makemancer
 openclaw mcp add makemancer --url https://makemancer.com/api/mcp --transport streamable-http --auth oauth
 openclaw mcp login makemancer
 ```
 
-For the skills too, install the plugin folder: `openclaw plugins install ./plugins/makemancer --force --accept-capabilities` from a clone of this repository (`--force` confirms a source outside ClawHub). Its manifest is `plugins/makemancer/openclaw.plugin.json`.
+Restart the gateway after installing. The plugin's manifest is `plugins/makemancer/openclaw.plugin.json`.
 
 ## Cursor and Grok Bot
 

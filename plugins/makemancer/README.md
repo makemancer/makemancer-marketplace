@@ -13,9 +13,11 @@ In Claude Code:
 
 In Claude, add it from Customize, then Plugins, and press **Connect** on its Connectors tab.
 
-In OpenClaw, install this folder as a plugin for the skills, then add the server and sign in (a plugin's own MCP entry cannot sign in with OAuth):
+In OpenClaw, install the plugin from ClawHub for the skills, then add the server and sign in (a plugin's own MCP entry cannot sign in with OAuth):
 
 ```
+openclaw plugins install clawhub:@makemancer/plugin --accept-capabilities
+openclaw plugins enable makemancer
 openclaw mcp add makemancer --url https://makemancer.com/api/mcp --transport streamable-http --auth oauth
 openclaw mcp login makemancer
 ```
