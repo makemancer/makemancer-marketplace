@@ -1,0 +1,27 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.makemancer/makemancer",
+  "title": "Makemancer",
+  "description": "Generate and edit images, video, voiceovers, music and sound effects from chat.",
+  "version": "1.0.0",
+  "websiteUrl": "https://makemancer.com",
+  "repository": {
+    "url": "https://github.com/makemancer/makemancer-marketplace",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://makemancer.com/apple-touch-icon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "180x180"
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://makemancer.com/api/mcp"
+    }
+  ]
+}

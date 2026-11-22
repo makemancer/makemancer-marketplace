@@ -1,0 +1,15 @@
+{
+  "name": "makemancer-directory-stub",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Stdio stub for MCP directories; points to the Makemancer remote MCP server at https://makemancer.com/api/mcp.",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2"
+  },
+  "license": "Apache-2.0"
+}
