@@ -40,8 +40,6 @@ Use `merge_media` with `video_urls` for only full video clips with their origina
 
 ## Timing before merging
 
-Before cutting or joining existing footage, run `extract_frames` with `mode: "scenes"` on each source and look at its overview image (`timelineUrl`): it lists every shot change, including fades and dissolves. Put cut points on shot changes so no join lands mid-shot.
-
 For narration-driven work, generate or reuse the final speech before locking clip durations. Keep at most 2.5 spoken words per clip second, with about 0.5 s of air at each end, and lock durations from the audio's `wordTimings`, not word-count guesses. Native-dialogue video and edits of existing footage may use different timing anchors; do not generate redundant voiceover.
 
 `add_audio_to_video` has two modes:
@@ -77,8 +75,6 @@ Call `assemble_film` only when every intended shot has its final `clipUrl`. Reso
 Joined clips butt together with no audio fade, so any change in background sound is heard at the cut. Keep continuous sound out of the clips and add it once over the cut.
 
 **In a film project, sound lives on the film's timeline.** Put each ambience bed, music track, narration line and timed effect on the film as an audio track: `film_track` on `generate_sound_effect`, `generate_music` or `generate_speech` places the result itself (`start` in seconds, or `at` with a `shot_id` and `offset_s` so it moves with the shot; `volume`, `loop`, `fade_in`, `fade_out`, `duck` for beds and music under speech). For audio you already have, use `update_film_project` `add_tracks`; `patch_tracks` moves or re-levels a track and `remove_tracks` takes it off. The film card lists the tracks, and `assemble_film` mixes them into the cut for free (ducking under narration and dialogue tracks, loudness about −16 LUFS); `defaults.clip_volume` or `clip_muted` sets how loud the clips' own sound plays under them. Read the film result's `timeline` for each shot's start before placing a sound.
-
-**Several narration lines over one continuous piece of music** go on a film timeline too, even when the picture is existing footage: import any clip or audio that is not in the library yet (`upload_asset` or `import_media`; a film only takes the account's own assets), put each clip on a shot (`update_film_project` `shots` or `patch_shots` with its `clipUrl`, or `add_take`), each line on its own narration track and the music on one track under them with `duck`, then export with `assemble_film`. Never cut an already mixed soundtrack into pieces and join them: the music jumps at every join. When a narration line is cut from a source that already has music under it, cut that excerpt out with `trim_video` first (`isolate_audio` takes no time range), run `isolate_audio` on it and put the clean voice on the timeline, or the old music plays under the new track.
 
 Outside a film project, or by hand:
 

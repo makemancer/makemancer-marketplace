@@ -9,7 +9,7 @@ Preserve the original and create clearly named derivatives. Distinguish determin
 | Cut a time range                                   | `trim_video`                                       |
 | Resize, crop, or pad                               | `scale_video`                                      |
 | Burn captions                                      | `add_subtitles`                                    |
-| Extract first, middle, last, or regularly spaced frames | `extract_frames`                             |
+| Extract frames, or list every shot change          | `extract_frames` (`mode: "scenes"` lists each shot) |
 | Replace a person or character in a clip            | `swap_video_characters`, whole character by default; ask for "keep their original outfit" to change only who the person is |
 | Concatenate clips or audio                         | `merge_media`                                      |
 | Put narration or music on a video                  | `add_audio_to_video`                               |
@@ -60,7 +60,7 @@ This is a continuation job, not a full-source edit. Keep the original timeline i
 
 1. Import the source through `../platform-upload.md`.
 2. Use `transcribe` and resolve the job when word timings are required.
-3. Run `extract_frames` with `mode: "scenes"` on the source and look at its overview image. Select cut points on word or sentence boundaries, keep each range inside one shot unless it is meant to span several, and never let a crop run into another shot.
+3. Select cut points on word or sentence boundaries.
 4. Use `trim_video` for approved ranges.
 5. Scale/reframe, then add subtitles only after timing is locked.
 6. Merge approved clips and audio.
@@ -68,8 +68,6 @@ This is a continuation job, not a full-source edit. Keep the original timeline i
 ## Audio polish
 
 Use `isolate_audio` before transcription or final assembly when the recording contains material noise, music, or reverb. Keep the untouched source. Resolve the queued result before passing it downstream.
-
-Several narration lines over continuous music go on a film project's timeline: each clip on a shot, each line as a narration track and the music as one track with `duck` (`update_film_project` `add_tracks`), then export with `assemble_film`, which is free. Clips and tracks must be media in the asset library. Never cut an already mixed soundtrack into pieces and join them: the music jumps at every join. Narration cut from a source with music under it: `trim_video` that excerpt, then `isolate_audio` it, and use the clean voice.
 
 ## Quality gate
 
