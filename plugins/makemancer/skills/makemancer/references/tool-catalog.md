@@ -66,6 +66,16 @@ For conversational setup or edits, prefer `update_theme({ interactive: true })`.
 
 Read `platform-upload.md` before choosing an import route.
 
+## Browsing and revising existing work
+
+| Tool | Use |
+| --- | --- |
+| `show_media` | Show up to 24 existing workspace items in an ordered gallery by asset ID, job ID or workspace CDN URL. Use when the user asks to see or compare saved outputs. |
+| `open_studio` | Open the requested Studio view for browsing, picking or managing work. Use direct lookup tools when running a production step. |
+| `swap_video_characters` | Replace a person in existing footage and keep the source motion. Use its preview and review flow. |
+| `update_video_workflow` | Revise the selected preview using the existing session and expected version. A model change can start a paid render in Auto. |
+| `lip_sync_video` | Synchronize an existing clip to finished dialogue. Identify the speaker on multi-person shots. |
+
 ## Characters, voices, and films
 
 | Tool                                      | Use                                                                                               |
@@ -74,6 +84,9 @@ Read `platform-upload.md` before choosing an import route.
 | `update_character`                        | Update a Character by `id`: description, reference image, stock voice, or a designed voice with `voice_preview_id`. |
 | `delete_character`                        | `{ id, confirm: true }` permanently deletes a Character and its saved voices, only on explicit request. |
 | `list_characters`                         | Find reusable Characters, their IDs, and saved voice options.                                     |
+| `search_voices` | Filter stock samples by spoken language, accent, gender, model and style. Reuse the selected model and voice ID. |
+| `list_speech_pronunciations`, `add_speech_pronunciations`, `delete_speech_pronunciations` | Inspect family and language rules, save an approved reading, or remove a selected entry by ID. Changes apply to future speech. |
+| `delete_film_project` | Permanently delete only the explicitly confirmed film. Linked media cleanup requires a separate explicit request. |
 | `design_voice`                            | Create a new synthetic voice from a description, no recording needed, with Fish Voice Design (three auditions, charged as one request). Save the pick with `update_character({ id, voice_preview_id })`, or `create_character({ title, voice_preview_id })` for a new Character. At the saved-voice limit, provide `replace_voice_option_id` to `update_character` to replace an existing designed voice. |
 | `clone_voice`                             | Clone a consenting speaker's recording on Fish Audio (speaks with `speech/fish-drama-3`). Attaches to `character_id`, or creates a voice-only Character when none is given. Provide `consent: true` only after the speaker's explicit agreement. Without audio it clones nothing and returns the consent statement and upload routes. |
 | `create_film_project`                     | Create a multi-shot Film project.                                                                 |
@@ -85,6 +98,7 @@ Read `platform-upload.md` before choosing an import route.
 
 | Tool                    | Use                                                                                       |
 | ----------------------- | ----------------------------------------------------------------------------------------- |
+| `increase_frame_rate` | Interpolate frames for higher fps or slow motion. |
 | `remove_background`     | Remove an image or video background.                                                      |
 | `upscale_image`         | Upscale `image_url` with an upscale `model` and its `extras`: `upscale/aura-sr` (default), `upscale/clarity`, `upscale/recraft-crisp`. |
 | `upscale_video`         | Upscale `video_url` with an upscale `model` and its `extras`: `upscale/bytedance` (default, has a pro tier), `upscale/realesrgan`, `upscale/topaz-starlight-precise-2.6`, `upscale/topaz-starlight-hq`, `upscale/topaz-starlight-mini`, `upscale/topaz-starlight-fast-2`. List them with `list_models({ category: "upscale" })`; `get_model_params({ model })` gives the `extras`. |
@@ -106,11 +120,15 @@ Audio on video:
 - With `audio_mode: "mix"` it keeps the clip's sound and layers the new track over it at the video's length. `original_volume` and `added_volume` (0–1) set each level; about 0.3 keeps music under speech.
 - `stitch_clips` layers one audio track over the clips at full level, and the result can run past the last clip.
 
+## Project budgets
+
+`list_budget_projects` finds existing projects. Use `show_budget_project` for recorded project spend, `create_budget_project` for a requested new project, and `update_budget_project` to change one. `assign_to_budget_project` attributes past jobs and their outputs together. Use estimates for planned work.
+
 ## Account and billing
 
-Use `manage_account` to view the connected account, balance, recent generations, and credit activity, including charges and refunds. Open `overview` for the balance, `activity` for a specific generation's recorded cost, or `settings` for account details and the video Review or Auto mode. The tool is read-only.
+Use `manage_account` to view the connected account, balance, recent generations, charges and refunds. Open `overview` for the balance, `activity` for a specific generation's recorded cost, or `settings` for account details and the video Review or Auto mode. The tool is read-only.
 
-Purchases and plans are handled on the Makemancer website, not in chat. Do not start, price, or recommend a purchase; if asked, say so and share only an account link a tool returned.
+For account changes, share the account link returned by the tool only when the user asks.
 
 Read [account guidance](workflows/account.md) to match jobs to charges, distinguish gross charges/refunds/net cost, and handle missing or older records. Use `estimate_generation` for future quotes, not proof of what a past generation cost. A balance question alone is not a feedback submission request.
 
@@ -120,7 +138,7 @@ Read [account guidance](workflows/account.md) to match jobs to charges, distingu
 | --------------------- | -------------------------------------------------------------------- |
 | `check_job`           | Resolve queued work by `job_id` when a completed result is required. |
 | `estimate_generation` | Estimate one planned generation and compare it with the current balance. The final cost is confirmed after generation finishes. |
-| `get_credits_balance` | Check the balance when exposed. Add `estimate_type` (the same values as `estimate_generation`'s `operation`), `estimate_model` and `estimate_params` to check whether one planned generation is affordable. |
+| `get_credits_balance` | Check the balance. Add `estimate_type` (the same values as `estimate_generation`'s `operation`), `estimate_model` and `estimate_params` to check whether one planned generation is affordable. |
 | `get_credits_link`    | Return the account link for adding credits, only when the user asks. |
 
 ## Product feedback

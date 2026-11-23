@@ -14,12 +14,16 @@ Compact orientation, checked 2026-10-06:
 | H3 / H3 Max / H3 Max Fast | H3 documents English, Chinese and several other dialogue languages. Max/Fast use that family baseline as inherited guidance, not separately published language validation. Get the full list from `get_model_params`. |
 | H3 Max Recast and Kling Motion Control Pro | Preserve the source video soundtrack, or remove it where supported. This does not establish native generated-speech or translation support; the recorded language comes from the source. |
 | Seedance 2.5 | English and Chinese, plus other documented languages including Spanish, Japanese and Arabic. Get the complete version-specific list from `get_model_params`; do not assume all Seedance versions share it. |
-| Kling 4.0 Omni (checked 2026-10-23) | Native dialogue is documented in English, Chinese and additional languages. Get the full version-specific list from `get_model_params({ model: "video/kling-4.0-omni" })`. Other languages, including Hebrew, remain unverified. Audio is always generated; voice guidance is not an exact supplied soundtrack. Source: [Kling comparison](https://kling.ai/blog/kling-4-vs-3). |
+| Kling 4.0 Omni (checked 2026-10-23) | Native dialogue is documented in English, Chinese and additional languages. Get the full version-specific list from `get_model_params({ model: "video/kling-4.0-omni" })`. Other languages, including Hebrew, remain unverified for native dialogue. Audio is always generated; voice guidance is not an exact supplied soundtrack. Source: [Kling comparison](https://kling.ai/blog/kling-4-vs-3). |
 | FLUX 3 Max (checked 2026-10-20) | Native audio is documented, with English dialogue demonstrated. No verified per-language reliability list is published for these exact endpoints. Language-specific reliability remains unverified. Read `get_model_params` and do not borrow a different FLUX version's language list. |
 
 An audio reference can guide a newly generated voice without preserving its words, language or timing. It does not make an unverified language reliable. Prompt-language support and a brand's TTS or translation language list do not establish video-dialogue support.
 
-Explain the relevant limitation briefly and recommend prepared speech plus `video/minimax-h3-max-lip-sync` or `video/heygen-avatar-4`. H3 Max Lip Sync advertises any language driven by supplied audio; review the actual result. For HeyGen, choose the audio-driven Avatar 4 route, not generic HeyGen Video 1 native generation. Honor an explicit model choice and explain the proposed change before switching.
+Explain the relevant limitation briefly and recommend prepared speech plus `video/minimax-h3-max-lip-sync` or `video/heygen-avatar-4`. Both are driven by the supplied audio, so the language comes from the speech; review the actual result. For HeyGen, choose the audio-driven Avatar 4 route, not generic HeyGen Video 1 native generation. Honor an explicit model choice and explain the proposed change before switching.
+
+## A cinematic shot with visible dialogue
+
+Prepare or reuse the approved lines. Render the shot on a model whose documented languages include this one, or render it without dialogue and run `lip_sync_video` with the finished lines when the user wants matching mouths. Off-screen lines only need an audio mix.
 
 ## One talking face or one requested shot
 

@@ -11,7 +11,7 @@ Characters preserve visual identity across images and video and can carry voices
 
 ### Reference image
 
-Use a clear image or character sheet with consistent lighting and no labels. For a generated sheet, start with `image/gpt-image-2.5-sunburst` for complex multi-view direction or another current model better suited to the target identity/style.
+Use a clear image or character sheet with consistent lighting and no labels. For a generated sheet, start with `image/gpt-image-2.6-sunburst` for complex multi-view direction or another current model better suited to the target identity/style.
 
 ```text
 Character reference sheet for [name]: [description]. Front, three-quarter,
@@ -60,8 +60,8 @@ Honor the requested script, storyboard, and final review stages, and the approva
 4. Start with `video/gemini-omni-flash`; use `video/seedance-2.5` for longer reference-heavy shots or `video/minimax-h3-max` for fast cinematic work with optional boundary frames. Use the curated picker in `video-gen.md`.
 5. Resolve and inspect each clip before patching it into the project.
 6. Keep every shot built from the same anchors; a previous clip's last frame (`extract_frames`) is only an extra composition cue.
-7. Add per-shot audio with `add_audio_to_video` (`audio_mode: "mix"` keeps the shot's sound; the default `replace` discards it and ends at the shorter input), or save one approved narration track as the project's `audio_url`. `assemble_film` narration replaces every shot's audio; set `with_narration: false` when shots carry dialogue.
-8. Call `assemble_film({ id })` only after every intended shot has an approved `clipUrl`.
+7. Put narration, music, ambience beds and timed effects on the film's timeline as audio tracks (`film_track` on `generate_speech`, `generate_music` and `generate_sound_effect`, or `update_film_project` `add_tracks`, importing outside audio first with `upload_asset` or `import_media`), not into the clips; see [media-assembly.md](../media-assembly.md) under seamless sound. `add_audio_to_video` (`audio_mode: "mix"`) still bakes audio into one clip. A project `audio_url` narration replaces every shot's audio at export; set `with_narration: false` when shots carry dialogue.
+8. Call `assemble_film({ id })` once every intended shot has an approved `clipUrl`. Exporting is free and mixes the audio tracks in.
 9. Resolve the assembly job with `check_job` before delivering the first cut. Read [media-assembly.md](../media-assembly.md) for duration matching, merge continuations, and track handling. Honor the applicable final review before marking it final; assembly does not add transitions, captions, per-shot audio, or a full sound mix.
 
 ## Shot rules

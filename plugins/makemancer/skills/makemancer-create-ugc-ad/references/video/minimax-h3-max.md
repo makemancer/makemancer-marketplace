@@ -4,9 +4,9 @@ Read [input modes and reference production](reference-production.md) before prep
 
 Use the outcome skill's execution guidance for authorization, imports and job recovery.
 
-Use `video/minimax-h3-max` for fast, aesthetically strong 480P, 768P, or Full HD (1080P) video with native synchronized audio, optional first/last frames, and multimodal references. Use `video/minimax-h3-max-turbo` (H3 Max Fast) for cheap, fast text or first-frame drafts. Turbo reference requests are supported and run on the shared H3 Max reference-to-video model, so they use reference-mode pricing rather than Turbo text/image pricing.
+Use `video/minimax-h3-max` for fast, aesthetically strong 480P, 768P, or Full HD (1080P) video with native synchronized audio, optional first/last frames, and multimodal references. Use `video/minimax-h3-max-turbo` (H3 Max Fast) for fast text or first-frame drafts when the H3 look is wanted; for the cheapest drafts, recommend Seedance 2.0 Mini instead. Turbo reference requests are supported and run on the shared H3 Max reference-to-video model, so they use reference-mode pricing rather than Turbo text/image pricing.
 
-Use `video/minimax-h3-max-extend` for a text-guided continuation of an existing video when its characters, setting, camera motion, and visual style should carry into the new footage. It is the default route for extending a clip. It is a separate model from H3 Max reference-to-video. Pass exactly one source in `video_urls` and a prompt describing only what happens next. The source must be 1.625–60 seconds, at most 50 MB, with aspect ratio 0.4–2.5. It adds 5–15 whole seconds at 480P, 768P, 1080P, or 2K. Call `get_model_params` for its current contract and `estimate_generation` for a source-aware credit estimate before an expensive extension.
+Use `video/minimax-h3-max-extend` for a text-guided continuation of an existing video when its characters, setting, camera motion, and visual style should carry into the new footage. It is the default route for extending a clip. It is a separate model from H3 Max reference-to-video. Pass exactly one source in `video_urls` and a prompt describing only what happens next. The source must be 1.625–60 seconds, at most 50 MB, with aspect ratio 0.4–2.5. It adds 5–15 whole seconds at 480P, 768P, 1080P, or 2K. Call `get_model_params` for its current contract and `estimate_generation` for a source-aware estimate before an expensive extension.
 
 Use `video/minimax-h3-max-insert` to replace an interval inside an existing clip with a new scene, then resume the original footage. Pass one source in `video_urls`, `extras.start_time` where the new scene begins and `extras.resume_time` where the original resumes, both on the source timeline. `duration` sets the new scene's length. Optional identity or product images go in `image_urls`. Describe the entry and return transitions, and keep `extras.color_match` on for continuity. Call `get_model_params` for its current limits.
 
@@ -14,7 +14,7 @@ Do not invent an `h3-max-lite` model ID. The current faster lightweight route is
 
 ## Core workflow
 
-For native dialogue, get the H3 family language baseline and its evidence status from `get_model_params`. Max/Fast inherit H3's language guidance; separate variant validation is unpublished. For languages outside that baseline, audio references do not establish reliable support: use [spoken languages](spoken-languages.md) with `video/minimax-h3-max-lip-sync` or HeyGen Avatar 4, keeping the user's requested shot count.
+For native dialogue, get the H3 family language baseline and its evidence status from `get_model_params`. Max/Fast inherit H3's language guidance; separate variant validation is unpublished. For languages outside that baseline, audio references do not establish reliable support: use [spoken languages](spoken-languages.md) with `video/minimax-h3-max-lip-sync`, keeping the user's requested shot count.
 
 When one person must say exact lines on camera, in any language, use `video/minimax-h3-max-lip-sync` with the finished speech instead of reference mode. Reference mode with `audio_urls` performs the line again and can add, drop or repeat words; keep it for several speakers or performance-led shots. See [voice in video](voice-in-video.md).
 
@@ -38,7 +38,7 @@ When one person must say exact lines on camera, in any language, use `video/mini
 | Identity, style, motion, or audio references | H3 Max or Turbo with `image_urls`, `video_urls`, and/or `audio_urls`. |
 | Continue an existing clip with its look and characters intact | H3 Max Extend with one source in `video_urls` and `duration` for the new footage. |
 | Replace an interval of an existing clip with a new scene | H3 Max Insert with one source in `video_urls`, `extras.start_time` and `extras.resume_time`. |
-| Cheapest text/image draft with no references | H3 Max Turbo; its reference mode uses the shared H3 Max route. Otherwise recommend Seedance 2.0 Mini for cheap drafts, including voice or audio references. |
+| Fast text/image draft in the H3 look | H3 Max Turbo; its reference mode uses the shared H3 Max route. For the cheapest drafts, including voice or audio references, recommend Seedance 2.0 Mini. |
 | One person speaks exact lines, or a clean face image speaks finished audio | `video/minimax-h3-max-lip-sync` with `image_url` and `extras.audio_url` (the finished line, not a voice sample); this is a separate route from native-dialogue/reference generation, and the words come out exactly as recorded. |
 
 H3 Max reference video conditions a new result. It is not a precise source-video editor.

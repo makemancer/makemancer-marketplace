@@ -2,7 +2,9 @@
 
 ## Speech localization
 
-Whenever this workflow generates Hebrew speech, always use full niqqud on every spoken Hebrew word across all supporting providers, including dialogue and voice-design auditions. Preserve the wording. Read [speech localization](voices/speech-localization.md) before preparing Hebrew or other pronunciation-sensitive speech text.
+Whenever this workflow generates Hebrew speech, use full niqqud on every spoken Hebrew word, including dialogue and voice-design auditions, unless the chosen speech model's `get_model_params` script rules say otherwise. Preserve the wording. Read [speech localization](voices/speech-localization.md) before preparing Hebrew or other pronunciation-sensitive speech text.
+
+To choose a stock voice, call `search_voices` with `language` set to the script's language code, for example `he`, `es` or `en-AU`. This is critical: the language decides which voices come back and which lead, so the voices that speak it best come first; without it the top results may not speak the language natively. Use the returned `model` and `voice_id` together. Then call `get_model_params` for that model before writing the script and follow its script rules (niqqud, English words, numbers, delivery tags). Where they differ from the general guidance here, the model's rules win.
 
 Read once when starting a Makemancer workflow; reuse it across supporting skills in the same task. Focused copies are generated from the root skill by `scripts/sync-skill-references.mjs`.
 
@@ -48,7 +50,7 @@ Keep explicit review stages for collaborative productions, but recognize approva
 
 An explicit video request authorizes one generation attempt per requested clip or approved shot. It does not authorize extra takes, comparisons, extensions, or generative repairs. After an attempt, deliver its result or report its failure and ask before generating another video unless the user explicitly requested that additional attempt. Complaints, "fix it," quality inspection, remaining budget, refunds, and provider retry suggestions are not permission to regenerate. Explain when a proposed fix would create another video. Explicit requests such as "generate another version" or "retry once" authorize that scope without a redundant question. Agree on a finite attempt count for open-ended iteration requests.
 
-This boundary also applies when model specialists or film workflows recommend revising, repairing, or regenerating a shot. Continue read-only inspection, status checks, and prompt drafting; execute requested edits to existing media within their scope, but do not replace them with generative video work. A confirmed pre-generation input rejection may be corrected within the original request only when no job started or was accepted and no credits were charged. An uncertain or failed accepted job requires explicit authorization for a replacement.
+This boundary also applies when model specialists or film workflows recommend revising, repairing, or regenerating a shot. Continue read-only inspection, status checks, and prompt drafting; execute requested edits to existing media within their scope, but do not replace them with generative video work. A confirmed pre-generation input rejection may be corrected within the original request only when no job started or was accepted and the service confirms there was no charge. An uncertain or failed accepted job requires explicit authorization for a replacement.
 
 ## Use the two relevant schemas
 
@@ -62,15 +64,13 @@ Preserve approved wording, quoted copy, dialogue, timecodes, and model-specific 
 
 Use `estimate_generation` only when the user asks about cost, balance, affordability, or gives a budget constraint. Provide `operation`, the selected `model`, and the exact planned generation fields inside `params`. Supported operations are `image`, `video`, `speech`, `audio` (music and sound effects), `upscale`, `video_upscale`, `frame_interpolation`, `lip_sync`, `swap_video_characters`, `transcribe` and `html_video`; omit `model` for `html_video`. Do not invent estimates for editing, assembly, or cloning operations this tool does not cover.
 
-An estimate is information for the user. Answer an estimate-only question without generating; when generation is already requested and fits the user's constraints, share the estimate and continue. State that final cost is confirmed after generation. For a batch, total the planned requests without treating each request's balance check as a separate budget allocation. Identify excluded processing costs and distinguish proposed costs from reported charges/refunds. An estimate does not reserve credits or guarantee a strict maximum charge; disclose that limitation when an exact ceiling is material. Never silently change an explicitly selected model, duration, or quality to fit a budget.
+An estimate is information for the user. Answer an estimate-only question without generating; when generation is already requested and fits the user's constraints, share the estimate and continue. State that final cost is confirmed after generation. For a batch, total the planned requests without treating each request's balance check as a separate budget allocation. Identify excluded processing costs and distinguish proposed costs from reported charges/refunds. An estimate can differ from the final charge. Explain this when the user specifies a strict ceiling. Never silently change an explicitly selected model, duration, or quality to fit a budget.
 
 ## Feedback and support
 
-Report meaningful quality problems or product friction so the team can improve future generations. One isolated quality issue is worth reporting; repeated failure is not required. Describe the intended result and the specific quality gap, including the model and job ID when known.
+Offer to report a concrete issue to the Makemancer team while helping with the requested fix. Send feedback only when the user requests or accepts that report. An explicit request to tell the team already authorizes the described report. Include the relevant model, job ID and a short description. Omit private media and script content. Use `generation_quality` for creative dissatisfaction and `bug` for confirmed technical malfunctions.
 
-Say briefly when you report product feedback, and do not report when the user asks you not to. Capture product complaints, feature wishes, praise, and issues you observe; an ordinary account or balance question is not product feedback. Use `generation_quality` for creative dissatisfaction with completed output, and `bug` for confirmed technical malfunctions. Send one specific report without private media or secrets.
-
-Do not turn quality complaints into refund or compensation requests, infer refund intent, or suggest asking for credits back. Feedback is not a refund request channel. If the user explicitly wants a refund or compensation, direct them to support@makemancer.com with the relevant job ID. Still report any concrete underlying quality issue as product feedback, without adding a refund request.
+For an explicit refund request, direct the user to support@makemancer.com with the relevant job ID. A separate quality report requires the user's agreement.
 
 Generations that successfully produce a playable video output are charged even if the user is not fully happy with the result. Explain this empathetically when relevant. Feedback helps improve the system for future generations; it does not itself refund charges or authorize another paid generation. For a particular charge or refund, check `manage_account` activity rather than inferring billing from job status. Failed or unplayable output needs separate investigation.
 

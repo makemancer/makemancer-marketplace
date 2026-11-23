@@ -28,10 +28,12 @@ Preserve the original and create clearly named derivatives. Distinguish determin
 
 Call `list_models({ category: "video" })` and `get_model_params` before choosing or submitting a generative edit. Runtime capability and limits are authoritative.
 
-- For a source clip up to 10 seconds, default to `video/gemini-omni-flash`. It is the best-value Makemancer route for one targeted natural-language change while retaining the source timeline. Use one clear change followed by an explicit preservation sentence.
+Never send the clip with only a text instruction. Edit a frame first: take the still the clip was generated from, or `extract_frames` for the moment that changes, change it with `generate_image`, and show it before any video. If the clip was generated from a still, animate the edited still again with the same model and prompt. Otherwise send the edited frame in `image_urls` beside the source clip. See [source edit](../video/recipe-source-edit.md).
+
+- For a source clip up to 10 seconds, default to `video/gemini-omni-flash`. It is the best-value Makemancer route for one targeted change while retaining the source timeline. Cite the edited frame as `<IMAGE_REF_0>` and follow one clear change with an explicit preservation sentence.
 - To extend a clip, default to `video/minimax-h3-max-extend`. Pass one source of 1.625–60 seconds in `video_urls`, a `duration` of 5–15 seconds for the new footage, and `aspect_ratio: "auto"`. Describe only what happens next. `extras.output: "extended"` (the default) returns the source plus the new footage; `"continuation"` returns only the new segment.
 - To replace an interval inside a clip with new footage, use `video/minimax-h3-max-insert`. Pass one source in `video_urls`, `extras.start_time` where the new scene begins and `extras.resume_time` where the original resumes (both on the source timeline), and `duration` for the new scene's length. Describe the entry and return transitions. Optional identity or product images go in `image_urls`.
-- For a 4–30 second source edit or a reference-rich transformation, use `video/seedance-2.5` with `extras.omni_reference_task_type: "edit"`. Use its `extend` mode only for heavy references or a long continuation. Use `aspect_ratio: "adaptive"` and the duration contract returned by `get_model_params`.
+- For a 4–30 second source edit or a reference-rich transformation, use `video/seedance-2.5` with `extras.omni_reference_task_type: "edit"` and the edited frame as `@Image1`. Use its `extend` mode only for heavy references or a long continuation. Use `aspect_ratio: "adaptive"` and the duration contract returned by `get_model_params`.
 
 Use other models, such as FLUX 3 or Seedance Mini, only when the user asks for them. Use Wan only when explicitly requested; recommend Seedance 2.5 for supported edits or extensions instead. Never recommend or proactively route to an LTX or DreamActor model. If the user explicitly requests one, preserve their choice but do not present it as a recommended route.
 
@@ -45,7 +47,7 @@ When the user says to leave the original video unchanged and add something befor
 4. Concatenate the untouched original and the approved continuation with `merge_media`.
 5. Preserve the original audio on the original span. Add or mix audio only for the new span unless the user requested a broader audio change.
 
-This is a continuation job, not a full-source edit. Do not spend credits regenerating the original timeline. For an original clip longer than the model's source limit, trimming context is expected and does not require splitting the untouched portion into generative segments.
+This is a continuation job, not a full-source edit. Keep the original timeline intact. For an original clip longer than the model's source limit, trimming context is expected and does not require splitting the untouched portion into generative segments.
 
 ## Long edits and exact details
 
@@ -58,7 +60,7 @@ This is a continuation job, not a full-source edit. Do not spend credits regener
 
 1. Import the source through `../platform-upload.md`.
 2. Use `transcribe` and resolve the job when word timings are required.
-3. Select cut points on word or sentence boundaries.
+3. Run `extract_frames` with `mode: "scenes"` on the source and look at its overview image. Select cut points on word or sentence boundaries, keep each range inside one shot unless it is meant to span several, and never let a crop run into another shot.
 4. Use `trim_video` for approved ranges.
 5. Scale/reframe, then add subtitles only after timing is locked.
 6. Merge approved clips and audio.
@@ -66,6 +68,8 @@ This is a continuation job, not a full-source edit. Do not spend credits regener
 ## Audio polish
 
 Use `isolate_audio` before transcription or final assembly when the recording contains material noise, music, or reverb. Keep the untouched source. Resolve the queued result before passing it downstream.
+
+Several narration lines over continuous music go on a film project's timeline: each clip on a shot, each line as a narration track and the music as one track with `duck` (`update_film_project` `add_tracks`), then export with `assemble_film`, which is free. Clips and tracks must be media in the asset library. Never cut an already mixed soundtrack into pieces and join them: the music jumps at every join. Narration cut from a source with music under it: `trim_video` that excerpt, then `isolate_audio` it, and use the clean voice.
 
 ## Quality gate
 

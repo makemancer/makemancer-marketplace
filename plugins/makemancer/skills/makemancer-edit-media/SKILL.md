@@ -23,7 +23,7 @@ Turn supplied footage or audio into a finished derivative. Apply the requested e
 | Burn captions | `add_subtitles`: transcribes the video itself and fits the font, size, and placement to the frame and language. See [Captions](#captions). |
 | Get a transcript or find a passage | `transcribe`: exactly one of `audio_url` or `video_url`. |
 | Clean a noisy recording | `isolate_audio`: keep and compare the original; cleanup can change speech. |
-| Get still frames | `extract_frames`: check the schema for first/last/sampling controls. |
+| Get still frames, or find every shot change | `extract_frames`: `mode: "scenes"` lists each shot's start and end with one overview image; check the schema for first/last/sampling controls. |
 | Put narration or music on a clip | `add_audio_to_video`: see [Audio](#audio). |
 | Make the mouths in a video match a voice | `lip_sync_video`: `video_url`, `audio_url` (replaces the video's audio; leave it out when the video already has the voice), `model` left out; `audio_start_seconds` places a short voice at a set moment. Real people, cartoons and animals, one speaker or several. Finishes through `check_job`. `add_audio_to_video` does not move mouths. |
 | Join clips or audio files in order | `merge_media` with `video_urls` or `audio_urls`. |
@@ -39,7 +39,7 @@ Route elsewhere: `makemancer-generate-video` for invented footage or a generativ
 ## Workflow
 
 1. Reuse the known asset or import the source through [platform-upload.md](references/platform-upload.md). Establish duration, aspect ratio, audio, and burned-in text from metadata and playback; do not invent measurements.
-2. Run the smallest edit chain. Trim a user-given range directly. Transcribe first only if text or timing is needed to choose cuts.
+2. Run the smallest edit chain. Trim a user-given range directly. Transcribe first only if text or timing is needed to choose cuts. Before choosing cut points or joining clips yourself, run `extract_frames` with `mode: "scenes"` and look at its overview image, so every cut lands on a shot change.
 3. Finish cuts and merges first, then resize to the final framing, then burn captions. Use a center crop only when the subject stays visible; otherwise pad or ask about the framing tradeoff.
 4. Resolve each queued job with `check_job` before passing its result on. On failure, follow [job-recovery.md](references/job-recovery.md) and resume from the last completed derivative.
 5. Burn captions last, following [Captions](#captions). Do not translate captions unless asked.
@@ -67,7 +67,7 @@ Use `cut_and_reframe_video` when the user has chosen the moments (or `makemancer
 
 Read [the cut-and-reframe contract](references/edit-contract.md) before building input.
 
-1. The source must be a video asset in this workspace. Keep an unchanged source URL and a source-timed transcript. Inspect metadata and frames; do not invent sizes, word times, or coordinates.
+1. The source must be a video asset in this workspace. Keep an unchanged source URL and a source-timed transcript. Inspect metadata and frames; do not invent sizes, word times, or coordinates. Run `extract_frames` with `mode: "scenes"` first: keep each range inside one shot unless it is meant to span several, and never let a crop range run into another shot. A range that crosses a shot change is still rendered and charged, with a warning.
 2. Choose safe boundaries. Listen around each edge when you can. Avoid clipped consonants, breaths, and cut-off reactions. Prefer a natural gap, keep enough lead-in and tail, and end on a short release without entering the next word. The renderer does not extend ranges. Do not remove every pause or change what someone meant.
 3. Set the requested width and height (1080×1920 is only the default). Use `pad` when position is uncertain. Use `center_crop` only after checking the subject stays in frame. For `crop`, give an even rectangle at the output aspect ratio, with static coordinates or keyframes set from real observations. If a speaker leaves the crop, revise the path or pad; never stretch or guess.
 4. Captions are optional. Pass real source-timed words; the tool remaps them after the cuts and burns them last. With only sentence timing, render the cuts first and run `add_subtitles` on the result. Never fabricate word alignment. Use plain captions for overlapping speakers or right-to-left text unless you can review karaoke visually.
@@ -105,13 +105,21 @@ Omit a bookend that was not requested. Joining videos is a hard cut: no dissolve
 - `stitch_clips` layers one audio track over the clips at full level, and the output can run past the last clip. Use it when the added audio should extend beyond the picture.
 - `merge_media` with `audio_urls` joins files end to end; it does not layer them.
 - Audio joins can crossfade: `crossfade_seconds` (0–30, try 5 for ambient music) overlaps adjacent tracks and shortens the output by that much per join, and `normalize_loudness: true` evens their levels first. Video joins never crossfade.
-- There is no ducking or volume automation. Say which operation is missing before creating assets that cannot be assembled as asked.
+- Several narration lines over continuous music: put them on a film project's timeline instead of mixing clip by clip. `create_film_project`, import any clip or audio that is not in the library yet (`upload_asset` or `import_media`), put each clip on a shot (`update_film_project` `shots` or `patch_shots` with its `clipUrl`, or `add_take`), each line as a narration track and the music as one track with `duck` (`add_tracks`), and export with `assemble_film`, which is free. Never cut an already mixed soundtrack into pieces and join them: the music jumps at every join. Read [assembly guidance](references/media-assembly.md) under seamless sound.
+- Narration cut from a source that already has music under it: cut that excerpt out with `trim_video` first (`isolate_audio` takes no time range), run `isolate_audio` on it and use the clean voice, or the old music plays under the new track.
+- Outside a film's timeline there is no ducking or volume automation. Say which operation is missing before creating assets that cannot be assembled as asked.
 
 ## Limits
 
 - A public YouTube, Google Drive, or social video page can go straight to `transcribe` as `video_url`. It is not a source for trimming, resizing, or subtitles; import the actual file for those.
 - `add_subtitles` already transcribes. Add a separate `transcribe` job only for a transcript the user wants or for choosing cuts.
 - `estimate_generation` does not cover these processing operations. Discuss cost only when it matters to the request, and do not present a partial estimate as the total.
+
+## Motion and cutouts
+
+Use `increase_frame_rate` for a higher playback frame rate or slow motion on finished footage. Inspect the source fps and use the live model schema. Apollo handles general interpolation, Chronos suits camera footage and Aion suits complex action with a longer wait. Check final duration and audio.
+
+For difficult solid image cutouts, use Bria RMBG 3.0 with `remove_background`. For video with translucent fabric, smoke or glow, choose a matting route that supports partial alpha and inspect the edges.
 
 ## Save results to the user's folder
 

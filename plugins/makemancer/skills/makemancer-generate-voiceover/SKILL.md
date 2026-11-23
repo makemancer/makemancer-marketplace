@@ -1,6 +1,6 @@
 ---
 name: makemancer-generate-voiceover
-description: "Generate narration, dialogue, or expressive speech with Makemancer, or design a new custom synthetic voice from a description. Use for spoken audio, voice selection, a saved Character voice, or 'make me a new voice'. To copy a real person's voice from a recording, use makemancer-clone-voice."
+description: "Generate narration, dialogue, or expressive speech with Makemancer, or design a new custom synthetic voice from a description. Use for finding voices by accent, previewing stock voices, repairing pronunciation, or speaking in a saved Character voice. To copy a real person's voice from a recording, use makemancer-clone-voice."
 ---
 
 # Generate voiceover
@@ -9,11 +9,13 @@ For each Makemancer tool call that exposes it, pass the optional `skills_used` a
 
 **Not connected yet?** If no Makemancer tools (such as `list_models` or `generate_image`) are available, the plugin is installed but the server is not connected. Stop and tell the user to open the plugin's **Connectors** tab in Claude (Customize, then Plugins, then Makemancer), press **Connect**, and sign in. In Claude Code they run `/mcp` instead. Then they ask again. Do not substitute other tools or describe a result that was not generated.
 
-Read [shared execution guidance](references/workflow-basics.md) before tools. The speech tool is `generate_speech`.
+Read [shared execution guidance](references/workflow-basics.md) before tools. The speech tool is `generate_speech`. For a requested take, send the requested script and selected or delegated voice to Makemancer and return the player in the current conversation. A script review, a voice search or a request to hear stock samples ends with the text or existing samples. If the user asks to choose between voices, wait for their choice.
+
+Use only the recording the user selected for the requested operation. If an attachment could be a script reference, pronunciation example, performance to transform, or cloning sample, clarify its purpose before uploading it. External sharing or publishing requires a request that identifies the output and destination. A complaint about a take is a request to help with that take. Offer to report it to Makemancer and wait for agreement before sending feedback.
 
 ## Localize the spoken text
 
-For Hebrew, always send full niqqud on every spoken Hebrew word to every speech model. Apply this to narration, each dialogue turn, clone auditions and voice-design preview text, including user-supplied scripts. Preserve the words and intended meaning while adding vowel points. This rule applies across providers, not only Fish. For Arabic, likewise send full tashkeel on every spoken Arabic word, vowelled for the requested dialect (Egyptian, Gulf, Levantine...) rather than Modern Standard Arabic, including user-supplied scripts. Before submitting Hebrew, Arabic or other pronunciation-sensitive text, read [speech localization](references/voices/speech-localization.md).
+For Hebrew, send full niqqud on every spoken Hebrew word unless the chosen model's `get_model_params` script rules ask for plain Hebrew. Apply this to narration, each dialogue turn, clone auditions and voice-design preview text, including user-supplied scripts. Preserve the words and intended meaning while adding vowel points. This rule applies across providers, not only Fish. For Arabic, likewise send full tashkeel on every spoken Arabic word, vowelled for the requested dialect (Egyptian, Gulf, Levantine...) rather than Modern Standard Arabic, including user-supplied scripts. Before submitting Hebrew, Arabic or other pronunciation-sensitive text, read [speech localization](references/voices/speech-localization.md).
 
 ## Which voice
 
@@ -47,7 +49,11 @@ Google Flash and Flash-Lite TTS take up to two speakers in one `generate_speech`
 3. Select a language-appropriate stock voice (`search_voices` when none is chosen) or saved Character and only settings accepted by that model. Never copy prompting tags across models.
 4. Generate the requested take. For a new clone or uncertain pronunciation, offer a short audition before a long production, not an unrequested paid model sweep. Do not add IPA or phonemes up front. If one word comes out wrong (an acronym, the stress, a homograph or a loanword), fix only that word as [pronunciation](references/voices/pronunciation.md) describes. Never send IPA to a model that does not decode it. When the user approves a fix, offer to save it as a saved pronunciation so later takes apply it automatically; saved rules already apply to every take, and the result lists the swaps.
 5. Follow queued results with `check_job` as directed by [job recovery](references/job-recovery.md). Show the completed audio through the available native preview.
-6. Keep the Character ID and voice/model choice available for the requested continuation. Speech added to a video is an audio overlay, not lip-sync, and a video's Character reference does not bring its voice into native video audio. For speech in video, read [voice in video](references/video/voice-in-video.md).
+6. Keep the Character ID and voice/model choice available for the requested continuation. Speech added to a video is an audio overlay, not lip-sync, and a video's Character reference does not bring its voice into native video audio.
+
+When the user likes a generated look or voice, offer once to save it as a named Character for future work. Check `list_characters` first. An explicit request to save the look or voice is agreement. Update the existing Character or create one when authorized with the approved image or selected voice. Reuse its ID for later shots or speech. A voice-only Character works for a narrator.
+
+For long narration, offer a representative paragraph if the user wants to check the voice first. Expand ambiguous dates, numbers and units in the spoken copy. Verify recurring names. Keep fixes in this script unless the user asks to save them for future takes.
 
 ## Save results to the user's folder
 

@@ -8,7 +8,7 @@ Use `video/seedance-2.5`, the premium cinematic model, for high-end, long (up to
 
 ## Core workflow
 
-Check spoken-language support in `get_model_params` before choosing native dialogue. Seedance 2.5 supports English, Chinese and other documented languages; unlisted languages remain unverified even with audio references. For those languages, use the dedicated single-shot or multi-shot route in [spoken languages](spoken-languages.md).
+Check spoken-language support in `get_model_params` before choosing native dialogue. Seedance 2.5 supports English, Chinese and other documented languages; unlisted languages remain unverified for native dialogue, even with audio references.
 
 1. Define the deliverable, duration, ratio, shot count, subjects, continuity, audio, and reference roles.
 2. Search for existing assets and import every external image, video, or audio file into Makemancer.
@@ -54,16 +54,18 @@ Choose the mode from the intended relationship to the source video:
 
 For `edit` and `extend`, include at least one `video_urls` entry and state the operation explicitly in the prompt, for example `Edit @Video1...` or `Extend @Video1 forward...`. The mode does not replace prompt direction. Makemancer uses `omni_reference_task_type` to normalize locked fields; state the operation explicitly in the prompt as well.
 
+Never edit from text alone. Edit a frame of the source with `generate_image` and show it first ([source edit](recipe-source-edit.md)), then cite it: `Edit @Video1: change the jacket to the navy rain shell shown in @Image1…`.
+
 ### Seedance 2.5 request matrix
 
 | Intent | Required inputs | Duration | Aspect ratio | Audio/references |
 | --- | --- | --- | --- | --- |
 | New text/image video | `prompt`, optional `image_url` | 4-30s | Explicit ratio or `adaptive` | `generate_audio` is enabled by default; `end_image_url` is supported for image-to-video |
 | Reference-guided video | `video_urls`/`image_urls`/`audio_urls`, `@` tokens, and `omni_reference_task_type: "reference"` | 4-30s | Explicit ratio or `adaptive` | Up to 30 images, 10 videos, 10 audio files, 50 total; audio needs an image/video |
-| Edit source video | `video_urls`, explicit `omni_reference_task_type: "edit"` | Source length | `adaptive` | Source must be 4-30s; timeline and framing are preserved |
+| Edit source video | `video_urls`, the edited frame in `image_urls`, explicit `omni_reference_task_type: "edit"` | Source length | `adaptive` | Source must be 4-30s; timeline and framing are preserved |
 | Extend source video | `video_urls`, explicit `omni_reference_task_type: "extend"` | Numeric 4-30s continuation | `adaptive` | Source/reference duration limits still apply |
 
-For an edit, pass the source length as `duration`; billing follows it. Invalid combinations are rejected before submission and before credit charge with a corrective message.
+For an edit, pass the source length as `duration`; billing follows it. Invalid combinations are rejected before a job starts with a corrective message.
 
 ## Preservation-first editing and extension
 
@@ -121,7 +123,7 @@ Seedance tokens are one-based and include `@`:
 @Image2 = exact wardrobe.
 @Image3 = product geometry and packaging.
 @Video1 = body movement and camera cadence only.
-@Audio1 = prepared dialogue in the requested language, including words, voice and timing.
+@Audio1 = prepared dialogue in the requested language, a reference for words, voice and timing.
 ```
 
 State what to copy and what not to copy:

@@ -39,6 +39,7 @@ Burn captions onto every variation with `add_subtitles` unless the user says no:
 - For each, write the line and the picture that sells it: the action, camera and light for its clip, or for a new hook, the opening scene and how it moves into the ad.
 - Lines fit their clip: at most 2.5 spoken words per second, with about 0.5 s of air at each end (an 8 s clip holds about 17 words; a 4 s hook about 7).
 - One voice for the whole set unless the voice is the variable. Call `get_model_params` once for the speech model (`speech/elevenlabs-v4` by default) and pick one stock voice that fits, the ad's own voice, or the user's saved Character voice.
+- If the user says a word sounds wrong (the stress, an acronym, a homograph or a loanword), fix only that word as [pronunciation](references/voices/pronunciation.md) describes and regenerate before suggesting feedback.
 - Write in the user's language.
 
 ## 4. One estimate, one go-ahead
@@ -55,7 +56,7 @@ Burn captions onto every variation with `add_subtitles` unless the user says no:
 Start every independent job together and resolve each with `check_job` before using its output.
 
 **New version**
-1. All N clips: same start frame or references, each with its own prompt for the action that sells its line, ending with "no speech, no music, no on-screen text". All N voiceovers at the same time (one, reused, when the script is fixed).
+1. Prepare the opening image for each distinct hook using [reference production](references/video/reference-production.md). Reuse one ready shot frame when the variations share that opening. Send each finished frame to its clip, each with its own prompt for the action that sells its line, ending with "no speech, no music, no on-screen text". All N voiceovers at the same time (one, reused, when the script is fixed).
 2. Check each voiceover's duration against its clip. If one runs longer, tell the user and offer a shorter line; never cut words or freeze the last frame.
 3. Add each voiceover with `add_audio_to_video`, `audio_mode: "mix"`, `original_volume` about 0.2 (keeps the clip's ambience) and `start_offset` about 0.3 s. The video keeps its full length; plain `replace` would end it at the last word.
 

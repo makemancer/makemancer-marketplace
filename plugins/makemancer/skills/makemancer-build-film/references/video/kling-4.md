@@ -111,7 +111,7 @@ Soft paper movement and quiet bakery ambience under the speech.
 No subtitles or background music.
 ```
 
-Use only the referenced speakers, give each line one owner, and leave room for reactions. Retrieve the exact model's documented spoken languages from `get_model_params`. Unverified languages, including Hebrew, use the [spoken-language workflow](spoken-languages.md) when precise delivery matters. A voice reference guides a new performance; it does not supply an exact recorded soundtrack. A single talking face within limits stays one shot unless the user requested several.
+Use only the referenced speakers, give each line one owner, and leave room for reactions. Retrieve the exact model's documented spoken languages from `get_model_params`. A single talking face within limits stays one shot unless the user requested several.
 
 ### A requested three-shot sequence
 
@@ -143,7 +143,7 @@ Put the sequence in one `prompt` with duration `15`. Timing is direction, not a 
 }
 ```
 
-Match output duration to the intended source interval when timing matters. Unlike the dedicated Swap workflow, general `generate_video` editing does not restore the source soundtrack. Asking to preserve it does not guarantee exact audio, pixels, duration or lip timing. Use media editing for an unchanged supplied soundtrack and review the actual result before authorizing another take.
+Match output duration to the intended source interval when timing matters. Unlike the dedicated Swap workflow, general `generate_video` editing does not restore the source soundtrack. Use media editing for an unchanged supplied soundtrack and review the actual result before authorizing another take.
 
 ## Current integration limits
 
@@ -154,15 +154,15 @@ These are integration limits, not every feature of Kling's website. Refresh them
 - Up to 15 reference images, image elements and videos combined: up to 10 reference images (or up to 8 middle frames with the first and last frame; frames cannot be combined with references or videos), up to 7 image elements, and up to 5 reference videos in `video_urls`, each 3 to 30 seconds and 30 seconds combined. Video elements and Kling voices are not available here.
 - Element photos: JPG/PNG, up to 10 MB each, at least 300 pixels on each side, aspect ratio 0.4 to 2.5; a frontal view plus 1 to 3 additional views.
 - Prompt: up to 8,000 characters. Preserve reference handles when shortening a prompt.
-- Native audio is always generated. No `generate_audio` switch, standalone `audio_urls`, seed, negative-prompt field, CFG, `multi_prompt`, 4K/HDR, Flash selector or extension control. Quiet sound requested in text is not an audio-off guarantee: in a multi-clip film, expect a background bed anyway and handle it as [media assembly](../media-assembly.md) describes.
+- Native audio is always generated. No `generate_audio` switch, `audio_urls`, seed, negative-prompt field, CFG, `multi_prompt`, 4K/HDR, Flash selector or extension control. Quiet sound requested in text is not an audio-off guarantee: in a multi-clip film, expect a background bed anyway and handle it as [media assembly](../media-assembly.md) describes.
 
 The website's advertised resolution, default duration, voice-upload and timeline controls do not override this route's schema. [Operation specification](https://dev.pika.art/llms/kling/kling-4.0/omni-video)
 
 ## Estimate with the actual inputs
 
-Text/image inputs: priced per output second, higher at 1080p than 720p, rounded up once per job. Use `estimate_generation` for the price. Requires a first credit purchase.
+Text/image inputs: priced per output second, higher at 1080p than 720p, rounded up once per job. Use `estimate_generation` for the price. Check model availability for the connected account.
 
-With video inputs, reserve billed seconds = output + max(output, measured combined input-video seconds). Use `estimate_generation` with the same inputs and cuts as generation. Do not quote the text/image-only rate for video-reference work. Final credits follow settled usage within the approved reserve. Credit purchase prices vary; do not convert them to a fixed dollar cost.
+With video inputs, reserve billed seconds = output + max(output, measured combined input-video seconds). Use `estimate_generation` with the same inputs and cuts as generation. Do not quote the text/image-only rate for video-reference work. Report the final cost from the completed job.
 
 Pricing and availability are live facts. These numbers are a snapshot, not a replacement for the tools.
 
@@ -176,7 +176,6 @@ Pricing and availability are live facts. These numbers are a snapshot, not a rep
 | Invented subtitles or music | Include no subtitles and no background music in `prompt`; do not invent control fields. |
 | Dialogue is rushed or assigned to the wrong person | Shorten the script, identify the speaker for each quoted line and allocate time for listening and reactions. |
 | Fine text, identity or physics is inconsistent | Inspect the relevant frames and choose a targeted repair; do not promise a prompt can guarantee exact pixels or typography. |
-| Speech or soundtrack must be exact | Use finished speech and an audio-driven lip-sync/avatar route, or a non-generative soundtrack edit. Native audio is a new performance. |
 
 A failed attempt or a quality complaint does not authorize another paid generation. Explain the proposed correction and use the outcome skill's existing approval rules.
 

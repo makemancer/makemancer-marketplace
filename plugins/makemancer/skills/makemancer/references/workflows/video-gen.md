@@ -5,7 +5,7 @@ Match the model to the shot, reference structure, duration, resolution, audio ne
 ## Workflow
 
 1. Define the deliverable: single shot or sequence, duration, ratio, subject, action, camera, audio, and continuity requirements.
-2. Follow the reference-first pipeline in [reference production](../video/reference-production.md): reuse anchors (`search_assets`, `list_characters`, `get_theme`), write one look line, and make one keyframe per shot with `generate_image` at the video's aspect ratio. Skip keyframes only when the user asks for direct text-to-video, supplies a ready shot image, or is editing footage.
+2. Follow the reference-first pipeline in [reference production](../video/reference-production.md): reuse anchors (`search_assets`, `list_characters`, `get_theme`), write one look line, and make one keyframe per shot with `generate_image` at the video's aspect ratio. Show the keyframes and get the user's go-ahead or changes before the video. Skip keyframes only when the user explicitly asks for text-to-video or supplies a ready shot image. To change existing footage, edit a frame first, as [edit-video](edit-video.md) describes.
 3. Pick one input mode per shot: people, several subjects or big motion → `image_urls` (keyframe + 2–3 anchors); exact opening → `image_url` = keyframe, no `image_urls` or `character_id`. For speech, pick a path from [voice in video](../video/voice-in-video.md).
 4. Use `list_models({ category: "video" })` when discovery is needed and `get_model_params` for missing settings on the selected model; reuse schemas already fetched in this task.
 5. State consequential settings briefly and proceed within what the user asked for. Estimate with `operation: "video"` only for user-requested cost/budget help.
@@ -23,9 +23,9 @@ Runtime discovery is authoritative. Start here:
 | Premium cinematic, reference-rich or long video | `video/seedance-2.5` | 4–30s, native audio, optional first/last frames, and large mixed-reference sets. `draft: true` at 480p makes a cheaper draft. |
 | General Kling generation and editing | `video/kling-4.0-omni` | 3 to 30 whole seconds, 720p/1080p, always-on native audio, first/last frames, mixed references and source edits. Read [Kling 4](../video/kling-4.md) before using advanced elements. |
 | Fast cinematic generation with strong adherence | `video/minimax-h3-max` | 5–15s, 480p/768p/1080p, native audio, optional first/last frames, and multimodal references. |
-| Text or image-driven video alongside H3 Max | `video/flux-3-max` | 5 to 20 seconds, 720p/1080p, generated audio, first/last frames or up to 10 timed keyframes. No video/audio references. Available before purchase. |
-| Cheap, fast drafts | `video/seedance-2.0-mini` | Recommended low-cost model: 4–15s, 480p/720p, native audio, start frame or image/video references. Available before purchase and eligible for the free first video. Accepts voice or audio input references with an image or video. Read [Seedance Mini](../video/seedance-mini.md). |
-| Cheapest text or start-frame draft with no references | `video/minimax-h3-max-turbo` | Present as H3 Max Fast. Reference requests use the shared H3 Max reference route. |
+| Text or image-driven video alongside H3 Max | `video/flux-3-max` | 5 to 20 seconds, 720p/1080p, generated audio, first/last frames or up to 10 timed keyframes. No video/audio references. |
+| Cheapest fast drafts | `video/seedance-2.0-mini` | Recommended low-cost model, cheaper than H3 Max Fast: 4–15s, 480p/720p, native audio, start frame or image/video references. Accepts voice or audio input references with an image or video. Read [Seedance Mini](../video/seedance-mini.md). |
+| Fast H3 draft, when the H3 look is wanted | `video/minimax-h3-max-turbo` | Present as H3 Max Fast. Costs more than Seedance Mini. Reference requests use the shared H3 Max reference route. |
 
 For native-audio single-pass clips and document or webpage briefs, recommend Seedance 2.5. Read the brief and prepare a prompt with supported media references; Seedance does not accept Wan's direct document/webpage fields. Use Wan only when explicitly requested.
 

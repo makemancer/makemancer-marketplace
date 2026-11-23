@@ -15,19 +15,15 @@ Read [shared execution guidance](references/workflow-basics.md) once per task be
 
 Convert a concept into an execution-ready video plan before spending on clips. This skill stops at an approved plan or storyboard unless the user also asks for production.
 
-For worked production flows, read only the relevant recipe: [product ad](references/video/recipe-product-ad.md), [consistent Character scene](references/video/recipe-character-scene.md), or [source edit, person replacement and extension](references/video/recipe-source-edit.md). These explain asset preparation, shot prompting, assembly and output checks, without authorizing extra paid drafts.
+For worked production flows, read only the relevant recipe: [product ad](references/video/recipe-product-ad.md), [consistent Character scene](references/video/recipe-character-scene.md), [source edit, person replacement and extension](references/video/recipe-source-edit.md), or [house tour from property photos](references/video/recipe-house-tour.md). These explain asset preparation, shot prompting, assembly and output checks, without authorizing extra paid drafts.
 
 ## Reference-first pipeline
 
-Unless the user asked for direct text-to-video, supplied a ready shot image, or is editing footage, follow this before `generate_video`. For a planning-only request, show the plan and stop: make keyframes only when the user asked for a visual storyboard, and do not call `generate_video`. New clips start from one keyframe image per shot, so the video model animates images the user has seen instead of inventing the face, product, outfit or location: tell the user how many images that is before making them.
+For a text plan, specify the set, cast, blocking and required frame for each shot and stop there. When the user requests a visual storyboard, produce the frames below. Start video production only when requested.
 
-1. Anchors, reuse first: `search_assets`, `list_characters`, `get_theme`. Person: Character sheet + face portrait (real person: also their best original photo). Product: real photo or packshot, plus a label/logo close-up when text matters. A recurring person or product with no anchor: create it first (makemancer-create-avatar, makemancer-product-photoshoot).
-2. Look line: one sentence (palette, light, lens, medium), pasted into every keyframe and video prompt.
-3. Keyframe per shot: `generate_image` with the same image model all project (default `image/nano-banana-2`), `aspect_ratio` = the video's ratio, main anchor in `image_url`, others in `extras.image_urls`, roles named. From shot 2 on, add the first approved keyframe (and the previous one when the scene continues) as a look reference alongside the anchors. Earlier keyframes set the look and place only: name this shot's own shot size and angle in the prompt, or the image copies their framing. One clean full-bleed frame; no text, grid or labels.
-4. Compare it to the anchors (face, label, logo, colors); fix with one targeted edit.
-5. Show keyframes and the plan (model, duration, ratio) in one message. Review mode: call `generate_video` now; the card is the approval. Auto: ask once unless the user said go.
-6. One mode per shot. People, several subjects or big motion: `image_urls` = [keyframe, identity anchor, product anchor], 2–4 total; `character_id` is fine here. Exact opening (product hero, logo reveal): `image_url` = keyframe, no `image_urls` or `character_id`.
-7. Next shot: same anchors and look line, plus the earlier keyframes as references. A previous clip's last frame is only an extra composition cue.
+Prepare the actual opening frame of every new shot before generating motion. Use an existing ready shot frame or make one at the delivery ratio. For a recurring location, reuse or design one set image and establish where everyone stands or sits in a wide frame. Build each shot image from that set, the sheet of every visible recurring Character (create missing sheets), and the established positions. Change the camera angle while preserving eyelines, wardrobe, props and positions unless the action moves them. Send the finished shot image to video as a literal start frame or a model-supported visual reference. Follow [reference production](references/video/reference-production.md) for the exact fields, including the approved start/end-frame route. Show the frames and let the user change them before any video: a still costs a fraction of a clip, and a clip made from text alone invents its own look on every attempt. Generate from text alone only when the user explicitly asks for it. To change existing footage, edit a frame first and send it with the clip, as [source edit](references/video/recipe-source-edit.md) describes; never send the clip with only a text instruction.
+
+Choose the speaking workflow before selecting the general video model. For one visible presenter delivering a recording or a line in a chosen voice, use H3 Max Lip Sync (`video/minimax-h3-max-lip-sync`) with the approved shot image and finished speech; the words come out exactly as recorded. For interacting speakers or a shot driven by body or camera movement, use native dialogue, or Seedance 2.5, Seedance 2.0 Mini or H3 Max with the finished lines as voice references; these perform the lines anew, so check the words, and repair mouths with `lip_sync_video` when the user asks. Gemini Omni 1.2 Flash is the general choice when audio input is unnecessary. Native dialogue, where the model writes the voice itself, needs a language documented for the exact model in `get_model_params`; if it is unsupported or unverified, say so and offer H3 Max Lip Sync. See [voice in video](references/video/voice-in-video.md). When the same Character speaks in more than one clip, make the voice before the first speaking shot and generate every line in it; native dialogue invents a new voice in every clip.
 
 Details: [reference production](references/video/reference-production.md). Image prompting: [image model index](references/images/index.md) and only the chosen guide.
 
@@ -42,7 +38,7 @@ Write the plan in the user's language and preserve approved dialogue or on-scree
 
 ## Build the storyboard
 
-For a visual storyboard request, create the needed artifacts with `makemancer-generate-image`. A text-only plan does not require images; reuse approved frames and skip duplicate review boards when unnecessary:
+For a standalone visual storyboard use `generate_image`. A text-only plan does not require images; reuse approved frames and skip duplicate review boards when unnecessary:
 
 - A review board or contact sheet for fast approval of composition, pacing, and continuity, only when useful.
 - One clean, text-free keyframe per shot, made as in the pipeline above. Never feed a labeled grid to a video model.
@@ -51,7 +47,7 @@ Preserve Character identity, product geometry, wardrobe, palette, screen directi
 
 ## Optional Film project
 
-If the user intends to continue into production, call `create_film_project` and persist the approved shots with `update_film_project`. Use stable shot IDs and the actual tool fields: `description`, `prompt`, `narration`, `storyboardUrl`, `durationS`, `model`, and `status`. Set the project to `script_ok` only after script approval and `storyboard_ok` only after storyboard approval.
+For an intended Film, call `create_film_project`, then save the approved shots with stable IDs in one `update_film_project({ id, shots })` call, using the actual shot fields: `description`, `prompt`, `narration`, `storyboardUrl`, `durationS`, `model`, and `status`. Resume or patch an existing plan with `get_film_project` and `patch_shots`. Set the project to `script_ok` only after script approval and `storyboard_ok` only after storyboard approval. A plan-only request ends with the saved plan.
 
 ## Approval gate
 

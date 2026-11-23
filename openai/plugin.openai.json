@@ -1,5 +1,5 @@
 {
-  "$comment": "OpenAI directory overlay. pack-openai.mjs merges it with brand.json (display name, short description, prompts, URLs). `name` is a placeholder: before uploading, replace it with the plugin ID OpenAI assigns (app-...), or the portal rejects the package. Review test cases and the demo video are added in S5.",
+  "$comment": "OpenAI directory overlay. pack-openai.mjs merges it with brand.json (display name, short description, prompts, URLs) and writes mcp.json for the ChatGPT endpoint. review.test_cases is copied from the backend repo's scripts/review/openai-review.json; review.demo_recording_url points at the walkthrough on our R2 media domain; reviewer credentials are entered in the portal.",
   "name": "makemancer",
   "version": "0.1.0",
   "keywords": [
@@ -33,6 +33,63 @@
       "Upscale images and video",
       "Remove backgrounds"
     ]
+  },
+  "review": {
+    "test_cases": {
+      "positive": [
+        {
+          "description": "Generate a product photo from a text prompt",
+          "prompt": "Use Makemancer to create a square product photo of a white ceramic coffee mug on a marble counter in soft morning light.",
+          "tools_triggered": "generate_image, check_job",
+          "expected_behavior": "Calls generate_image once with the prompt and a 1:1 aspect ratio. The Makemancer card shows the credits held and updates itself until the image is ready (check_job is used if the model checks the status), then shows the image with a download link. No other generation tools are called."
+        },
+        {
+          "description": "Remove the background of an attached photo",
+          "prompt": "Use Makemancer to remove the background from the attached product photo and give me a transparent PNG.",
+          "file_attachment_urls": [
+            "https://makemancer.com/site/media/perfume-travertine.webp"
+          ],
+          "tools_triggered": "import_chatgpt_media, remove_background, check_job",
+          "expected_behavior": "Imports the attachment with import_chatgpt_media and passes the stored file to remove_background. The card shows the credits charged and updates itself until the transparent PNG is ready, with a download link. It does not ask the user for a public link."
+        },
+        {
+          "description": "Animate a photo into a short video after checking the cost",
+          "prompt": "Use Makemancer to animate the attached photo into a five-second clip with a slow camera push-in. Tell me the cost before you start.",
+          "file_attachment_urls": [
+            "https://makemancer.com/site/media/perfume-travertine.webp"
+          ],
+          "tools_triggered": "import_chatgpt_media, estimate_generation, generate_video, check_job",
+          "expected_behavior": "Imports the attachment and prepares a 5-second image-to-video request with the photo as the start frame (it may call list_models or estimate_generation first). The review account renders videos in Review mode, so generate_video returns a review card with the model, settings and cost; nothing renders or is charged until the reviewer selects Generate (the account's first video is free, later ones show their credit cost). The card then updates itself and plays the clip, typically within 1-5 minutes."
+        },
+        {
+          "description": "Generate a voiceover from a script line",
+          "prompt": "Use Makemancer to read this line in a warm, natural voice: \"Fresh coffee, every morning.\"",
+          "tools_triggered": "generate_speech, check_job",
+          "expected_behavior": "Calls generate_speech with the exact words of the line; the speech model may prefix a short delivery tag such as [warm, natural]. The card shows the credits charged and plays the audio with a download link. The words themselves are not rewritten."
+        },
+        {
+          "description": "Check the credit balance and recent charges",
+          "prompt": "How many Makemancer credits do I have left, and what did my last generation cost?",
+          "tools_triggered": "manage_account",
+          "expected_behavior": "Calls manage_account (overview or activity), which is read-only, and reports the balance and the latest generation's model, status and credits charged or refunded. It does not generate media, start a purchase or link to a checkout page."
+        }
+      ],
+      "negative": [
+        {
+          "description": "Plain writing request with no media",
+          "prompt": "Write a four-line poem about autumn leaves."
+        },
+        {
+          "description": "Unrelated factual question",
+          "prompt": "What time is it in Tokyo right now, and what's the weather like there?"
+        },
+        {
+          "description": "Question about how image generation works, not a request to generate",
+          "prompt": "Explain in simple terms how AI image generators turn a text prompt into a picture."
+        }
+      ]
+    },
+    "demo_recording_url": "https://media.makemancer.com/review/makemancer-chatgpt-review-f383b7358b1e.mp4"
   },
   "publication": {
     "release_notes": "First release: images, product photoshoots, video clips, voiceovers, music and sound effects."

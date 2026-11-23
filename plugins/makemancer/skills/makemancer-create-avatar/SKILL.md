@@ -37,6 +37,8 @@ For identity-guided images, resolve the sheet/portrait into the selected model's
 
 Visual and voice reuse are separate: a Character ID does not put its saved voice into native video dialogue. For speech in video, pick a path from [voice in video](references/video/voice-in-video.md).
 
+When the user likes a generated look or voice, offer once to save it as a named Character for future work. Check `list_characters` first. An explicit request to save the look or voice is agreement. Update the existing Character or create one when authorized with the approved image or selected voice. Reuse its ID for later shots or speech. A voice-only Character works for a narrator.
+
 ## Save results to the user's folder
 
 When you can read and write local files (Claude Code, Codex, Cowork and similar), save every finished result as soon as its job completes:

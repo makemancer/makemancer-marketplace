@@ -10,7 +10,7 @@ Use `video/gemini-omni-flash` as Makemancer's default video model. It is the pri
 
 1. Define one clip: purpose, duration, aspect ratio, subject, action, camera, audio, and protected visual details.
 2. Search for reusable assets and import any ChatGPT attachments into Makemancer before passing them to URL fields.
-3. Follow the reference-first pipeline in [reference production](reference-production.md): one clean keyframe per shot, made at 16:9 or 9:16 (Omni's only ratios), then its per-shot mode rule. Skip keyframes only on an explicit direct-generation request, a ready shot image, or a source edit.
+3. Follow the reference-first pipeline in [reference production](reference-production.md): one clean keyframe per shot, made at 16:9 or 9:16 (Omni's only ratios), then its per-shot mode rule. Skip keyframes only on an explicit direct-generation request or a ready shot image. For a source edit, edit a frame of the clip first ([source edit](recipe-source-edit.md)).
 4. Call `get_model_params({ model: "video/gemini-omni-flash" })` before generation when not already fetched for this task. Treat its current schema as authoritative.
 5. Choose `resolution` from the current schema when output size matters. The direct Google route supports `360p`, `720p` (default), `1080p`, and `4k`; 1080p and 4K are upscaled outputs. Explain the selected duration, ratio, resolution, references, and audio plan when useful. Reuse existing authorization, including an explicitly requested batch; ask only when a material choice is unresolved or the proposed work expands the requested scope.
 6. Call `generate_video` with `model: "video/gemini-omni-flash"`.
@@ -24,7 +24,7 @@ Use `video/gemini-omni-flash` as Makemancer's default video model. It is the pri
 | Direct text-to-video (explicit request only) | `prompt` only | Describe the complete visible scene and sound. |
 | Animate a still | `image_url` | Describe what begins moving after the supplied first frame. |
 | Reference-guided video | `image_urls` | Bind every reference to a role with `<IMAGE_REF_N>`. |
-| Edit a source clip | one item in `video_urls` | Give one short change followed by “Keep everything else the same.” |
+| Edit a source clip | one item in `video_urls`, plus the edited frame in `image_urls` | Give one short change shown in `<IMAGE_REF_0>`, followed by “Keep everything else the same.” |
 
 Do not combine modes casually. Use `image_url` when an image must be the literal first frame. Use `image_urls` when images should guide identity, product appearance, wardrobe, environment, or style without becoming the opening frame.
 
@@ -88,7 +88,9 @@ Then direct the shot:
 Preserve the product from <IMAGE_REF_0> exactly. Borrow only the cool rim
 lighting and glossy black environment from <IMAGE_REF_1>. The actor wears the
 outfit from <IMAGE_REF_2>. She places the product on the pedestal as the camera
-makes a slow 30-degree orbit. No cuts, no on-screen text, no geometry changes.
+slowly pushes in about 15%. No cuts, no on-screen text.
+The product stays one rigid object with the same shape, colours and logo from
+the first frame to the last.
 ```
 
 Preserve exact quoted copy, reference labels, dialogue, timecodes, colors, and approved layout or edit constraints in the prompt.
@@ -102,14 +104,32 @@ Purpose: [ad, cinematic insert, product reveal, social clip].
 References: [token → exact role; attributes to preserve].
 Scene: [subject, environment, composition].
 Action: [one filmable action with visible motion].
-Camera: [framing + one intentional movement].
+Camera: [framing + one movement with its size and speed].
 Look: [lighting, lens/medium, palette, texture].
 Audio: [dialogue, ambience, effects, music, or explicit silence; in a multi-clip film, only dialogue and picture-synced effects, then "no music, no background ambience"].
 Timing: [optional natural beats or time ranges].
-Constraints: [identity, product geometry, no cuts/text/subtitles/watermarks].
+Constraints: [no cuts/text/subtitles/watermarks, then one closing line naming the objects at risk in the same words used above].
 ```
 
 For reusable B-roll, use one subject, one action, and one camera idea. Say “single continuous shot, no scene cuts” when cuts would make the clip unusable.
+
+## Realistic physics and continuity
+
+Objects that vanish, appear from nowhere, or change shape or material come from what the prompt leaves open. A general “no morphing” or “realistic physics” line does not stop it. In tests on real failing prompts, these did:
+
+1. **One action per clip.** Split a story with several beats into several clips.
+2. **Camera move with a size and speed:** “a slow, straight push-in of about 15% over 5 seconds.” Around a product, push in rather than orbit: orbits bend products.
+3. **A closing line naming the objects at risk**, in the same words used earlier in the prompt. Reusing the nouns matters: “red coat” and later “crimson jacket” read as two coats.
+
+   ```text
+   The four white paper cups with a red print stay white paper cups with the
+   same print, lids and straws, all four in the cardboard carrier, from the
+   first frame to the last.
+   ```
+4. **Where anything new comes from, and where anything leaving goes:** “the line pulls the fish up out of the water beside the boat, until he holds it in both hands”; “the tweezers lift away toward the top right and leave the frame.”
+5. **Products and loops:** give a start and an end frame when `get_model_params` lists `last_frame_url`.
+
+Many small identical objects (insects, crumbs, a crowd of props) can still vanish; keep fewer of them, larger in frame. To fix one morph in a finished clip, edit that clip with the one change plus “Keep everything else the same” instead of rendering it again.
 
 ## Timing and audio
 
@@ -137,11 +157,11 @@ Keep spoken copy short enough to fit naturally. Quote exact lines and preserve t
 
 ## Source-video editing
 
-Pass one source clip in `video_urls`. Use a concise delta:
+Edit one frame of the clip with `generate_image` first and show it, as [source edit](recipe-source-edit.md) describes. Then put the source clip in `video_urls` and the edited frame in `image_urls`. Use a concise delta:
 
 ```text
-Replace the overcast sky with a warm sunset. Keep the people, timing, camera
-motion, buildings, and every other detail unchanged.
+Replace the overcast sky with the warm sunset sky shown in <IMAGE_REF_0>. Keep
+the people, timing, camera motion, buildings, and every other detail unchanged.
 ```
 
 Avoid redescribing the source. A long prompt increases unintended changes. Omni editing is best for one clear transformation per pass.
@@ -153,12 +173,14 @@ Verify the source duration before submission. The current Makemancer Omni edit r
 Product reveal:
 
 ```text
-Premium ten-second product film. The matte-black headphones remain identical to
-the approved first frame. They rotate slowly above a dark reflective plinth as a
-thin ribbon of amber light travels across the ear cups. Macro commercial lens,
-slow clockwise orbit, deep black background, crisp highlights. Sound design:
-low electronic pulse and a soft magnetic click. Single continuous shot. No
-people, text, captions, logo changes, or extra objects.
+Premium eight-second product film, starting exactly on the approved first frame:
+matte-black headphones resting on a dark reflective plinth. One action: a thin
+ribbon of amber light travels across the ear cups from left to right. Macro
+commercial lens, a slow straight push-in of about 15% over the whole shot, deep
+black background, crisp highlights. Sound design: low electronic pulse and a
+soft magnetic click. Single continuous shot. No people, text or captions.
+The headphones stay one rigid object with the same ear cups, headband and logo,
+in the same place on the plinth, from the first frame to the last.
 ```
 
 Character scene with references:
@@ -175,13 +197,13 @@ extra people near camera.
 Source edit:
 
 ```text
-Transform the source video into a premium hand-painted anime look. Preserve the
-exact motion, timing, people, composition, and camera path. Keep everything else
-the same. No subtitles or added text.
+Transform the source video into the hand-painted anime look of <IMAGE_REF_0>,
+its restyled first frame. Preserve the exact motion, timing, people, composition,
+and camera path. Keep everything else the same. No subtitles or added text.
 ```
 
 ## Quality and feedback
 
-Reject static-subject pans when subject motion was requested, identity drift, product deformation, unexpected cuts, lip-sync mismatch, duplicate limbs, embedded text, and audio contradicting the prompt. Revise one failure at a time.
+Reject static-subject pans when subject motion was requested, identity drift, product deformation, objects appearing from nowhere or vanishing, unexpected cuts, lip-sync mismatch, duplicate limbs, embedded text, and audio contradicting the prompt. Revise one failure at a time, using [realistic physics and continuity](#realistic-physics-and-continuity).
 
 When you report a quality issue with `submit_feedback`, include concrete model-specific failures without exposing private media.

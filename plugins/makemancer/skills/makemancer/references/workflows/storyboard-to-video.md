@@ -24,7 +24,7 @@ Use one main action and one camera idea per short beat. For a multi-shot Film pr
 
 ## 2. Create the review board
 
-Use `image/gpt-image-2.5-sunburst` for a complex labeled contact sheet; it holds the panel layout and the label text. Verify it at runtime.
+Use `image/gpt-image-2.6-sunburst` for a complex labeled contact sheet; it holds the panel layout and the label text. Verify it at runtime.
 
 Pass exact panel instructions:
 
@@ -64,7 +64,7 @@ Call `list_models({ category: "video" })` and `get_model_params`.
 - General approved first-frame animation or source editing → `video/gemini-omni-flash`.
 - Premium cinematic, long or reference-heavy production → `video/seedance-2.5`. For a cheaper preview, `draft: true` at 480p makes a draft.
 - Fast cinematic production with optional first/last frames → `video/minimax-h3-max`.
-- Cheap, fast draft, including one that follows voice or audio input references → `video/seedance-2.0-mini`; cheapest text/start-frame draft with no references → `video/minimax-h3-max-turbo` (H3 Max Fast).
+- Cheap, fast draft, including one that follows voice or audio input references → `video/seedance-2.0-mini`, the cheapest option; a fast H3 draft when the H3 look is wanted → `video/minimax-h3-max-turbo` (H3 Max Fast).
 - Native-audio single pass of 4 to 30 seconds, or a document or webpage brief: use `video/seedance-2.5`. Read the brief and prepare a prompt with supported media references; do not pass Wan's direct document/webpage fields. Use Wan only when explicitly requested.
 
 Start with Gemini Omni. Match the approved board's structure to the chosen model's actual input contract when Seedance 2.5 or H3 Max is a better fit.

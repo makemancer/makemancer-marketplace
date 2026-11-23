@@ -98,6 +98,8 @@ Where `open_studio` is not available, do not mention Studio or pinning; offer to
 
 End with two or three next ideas that fit what they said they want, each a sentence they can send as it is: a longer multi-shot film, a creator-style ad, a product photo set, captions on a clip, a music bed.
 
+When the user likes a look or voice during setup, offer to keep it in a named Character. Reuse an existing Character when one matches. For a scene using its saved voice, generate the line with that Character and use H3 Max Lip Sync with the prepared shot image when one person says the line in view; Seedance takes the recording as a voice reference and performs it anew, so check the words. Omni 1.2 remains suitable for clips with no audio input.
+
 ## Save results to the user's folder
 
 When you can read and write local files (Claude Code, Codex, Cowork and similar), save every finished result as soon as its job completes:
