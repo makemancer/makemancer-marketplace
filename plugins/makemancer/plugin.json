@@ -24,5 +24,14 @@
     "sound-effects",
     "ai-media",
     "mcp"
-  ]
+  ],
+  "extensions": {
+    "com.nousresearch.hermes": {
+      "servers": {
+        "makemancer": {
+          "trust": "untrusted"
+        }
+      }
+    }
+  }
 }
